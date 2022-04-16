@@ -1,5 +1,12 @@
-from rest_framework.generics import CreateAPIView
-from .serializers import ArticleSerializer, CommentSerializer
+from rest_framework import status
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.response import Response
+from .models import Article
+from .serializers import (
+    ArticleSerializer,
+    CommentSerializer,
+    ArticleWithCommentsSerializer,
+)
 
 
 class ArticleCreateView(CreateAPIView):
@@ -17,3 +24,13 @@ class CommentCreateView(CreateAPIView):
     or other comments to
     """
     serializer_class = CommentSerializer
+
+
+class ArticleWithCommentsDetailView(RetrieveAPIView):
+    """
+    Add comment as an instance
+    which we attach either articles
+    or other comments to
+    """
+    queryset = Article.objects.all()
+    serializer_class = ArticleWithCommentsSerializer
