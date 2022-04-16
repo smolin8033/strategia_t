@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from .models import Article, Comment
 from .serializers import (
     ArticleSerializer,
-    CommentSerializer,
     ArticleWithCommentsSerializer,
+    CommentSerializer,
+    CommentChildSerializer,
 )
 
 
@@ -24,7 +25,7 @@ class CommentCreateView(CreateAPIView):
     which we attach either articles
     or other comments to
     """
-    serializer_class = CommentSerializer
+    serializer_class = CommentChildSerializer
 
     def perform_create(self, serializer):
         created_comment = serializer.save()
@@ -37,10 +38,5 @@ class CommentCreateView(CreateAPIView):
 
 
 class ArticleWithCommentsDetailView(RetrieveAPIView):
-    """
-    Add comment as an instance
-    which we attach either articles
-    or other comments to
-    """
     queryset = Article.objects.all()
     serializer_class = ArticleWithCommentsSerializer
