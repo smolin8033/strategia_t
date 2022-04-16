@@ -22,7 +22,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'content', 'article', 'parent', 'comments_to_comment')
 
     def get_comments_to_comment(self, obj):
-        return CommentSerializer(obj.children(), many=True).data
+        return CommentSerializer(obj.children().filter(level__lte=3), many=True).data
 
 
 class ArticleWithCommentsSerializer(serializers.ModelSerializer):
