@@ -7,7 +7,7 @@ class Article(models.Model):
     def __str__(self):
         return str(self.content)
 
-    def get_1_lvl_comments(self):
+    def get_first_lvl_comments(self):
         return Comment.objects.filter(article=self, parent=None)
 
 
@@ -20,5 +20,5 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.content)
 
-    def children(self):
+    def get_children(self):
         return Comment.objects.filter(parent=self)

@@ -8,7 +8,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ('id', 'content')
 
 
-class CommentChildSerializer(serializers.ModelSerializer):
+class CommentAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'content', 'article', 'parent')
@@ -19,10 +19,21 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'content', 'article', 'parent', 'comments_to_comment')
+        fields = ('id', 'level', 'content', 'article', 'parent', 'comments_to_comment')
 
     def get_comments_to_comment(self, obj):
-        return CommentSerializer(obj.children().filter(level__lte=3), many=True).data
+        return CommentSerializer(obj.get_children().filter(level__lte=3), many=True).data
+
+
+class CommentWithCommentsSerializer(serializers.ModelSerializer):
+    comments_to_comment = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'level', 'content', 'article', 'parent', 'comments_to_comment')
+
+    def get_comments_to_comment(self, obj):
+        return CommentWithCommentsSerializer(obj.get_children(), many=True).data
 
 
 class ArticleWithCommentsSerializer(serializers.ModelSerializer):
@@ -33,4 +44,4 @@ class ArticleWithCommentsSerializer(serializers.ModelSerializer):
         fields = ('id', 'content', 'comments_to_article')
 
     def get_comments_to_article(self, obj):
-        return CommentSerializer(obj.get_1_lvl_comments(), many=True).data
+        return CommentSerializer(obj.get_first_lvl_comments(), many=True).data

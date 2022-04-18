@@ -4,7 +4,8 @@ from .serializers import (
     ArticleSerializer,
     ArticleWithCommentsSerializer,
     CommentSerializer,
-    CommentChildSerializer,
+    CommentAddSerializer,
+    CommentWithCommentsSerializer
 )
 
 
@@ -22,7 +23,7 @@ class CommentCreateView(CreateAPIView):
     which we attach either articles
     or other comments to
     """
-    serializer_class = CommentChildSerializer
+    serializer_class = CommentAddSerializer
 
     def perform_create(self, serializer):
         created_comment = serializer.save()
@@ -37,3 +38,8 @@ class CommentCreateView(CreateAPIView):
 class ArticleWithCommentsDetailView(RetrieveAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleWithCommentsSerializer
+
+
+class CommentWithCommentsDetailView(RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentWithCommentsSerializer
