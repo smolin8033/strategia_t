@@ -8,34 +8,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ('id', 'content')
 
 
-class CommentAddSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = ('id', 'content', 'article', 'parent')
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    comments_to_comment = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = ('id', 'level', 'content', 'article', 'parent', 'comments_to_comment')
-
-    def get_comments_to_comment(self, obj):
-        return CommentSerializer(obj.get_children().filter(level__lte=3), many=True).data
-
-
-class CommentWithCommentsSerializer(serializers.ModelSerializer):
-    comments_to_comment = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = ('id', 'level', 'content', 'article', 'parent', 'comments_to_comment')
-
-    def get_comments_to_comment(self, obj):
-        return CommentWithCommentsSerializer(obj.get_children(), many=True).data
-
-
 class ArticleWithCommentsSerializer(serializers.ModelSerializer):
     comments_to_article = serializers.SerializerMethodField()
 
@@ -44,4 +16,32 @@ class ArticleWithCommentsSerializer(serializers.ModelSerializer):
         fields = ('id', 'content', 'comments_to_article')
 
     def get_comments_to_article(self, obj):
-        return CommentSerializer(obj.get_first_lvl_comments(), many=True).data
+        return Comments3LvlSerializer(obj.get_first_lvl_comments(), many=True).data
+
+
+class CommentAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'author', 'content', 'article', 'parent')
+
+
+class Comments3LvlSerializer(serializers.ModelSerializer):
+    comments_to_comment = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'level', 'author', 'content', 'article', 'parent', 'comments_to_comment')
+
+    def get_comments_to_comment(self, obj):
+        return Comments3LvlSerializer(obj.get_children().filter(level__lte=3), many=True).data
+
+
+class CommentWithCommentsSerializer(serializers.ModelSerializer):
+    comments_to_comment = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'level', 'author', 'content', 'article', 'parent', 'comments_to_comment')
+
+    def get_comments_to_comment(self, obj):
+        return CommentWithCommentsSerializer(obj.get_children(), many=True).data

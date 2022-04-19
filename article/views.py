@@ -3,7 +3,6 @@ from .models import Article, Comment
 from .serializers import (
     ArticleSerializer,
     ArticleWithCommentsSerializer,
-    CommentSerializer,
     CommentAddSerializer,
     CommentWithCommentsSerializer
 )
@@ -26,6 +25,9 @@ class CommentCreateView(CreateAPIView):
     serializer_class = CommentAddSerializer
 
     def perform_create(self, serializer):
+        """
+        Autofill lvl-attribute of Comment model
+        """
         created_comment = serializer.save()
         if created_comment.parent is None:
             created_comment.level = 1
@@ -36,10 +38,18 @@ class CommentCreateView(CreateAPIView):
 
 
 class ArticleWithCommentsDetailView(RetrieveAPIView):
+    """
+    Get the article and all comments/nested comments to it
+    until the 3 lvl
+    """
     queryset = Article.objects.all()
     serializer_class = ArticleWithCommentsSerializer
 
 
 class CommentWithCommentsDetailView(RetrieveAPIView):
+    """
+    Get the comment of a certain lvl (i.e. 3 lvl)
+    and all comments/nested comments to it
+    """
     queryset = Comment.objects.all()
     serializer_class = CommentWithCommentsSerializer

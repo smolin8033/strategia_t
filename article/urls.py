@@ -1,14 +1,14 @@
 from django.urls import path
 from .views import (
     ArticleCreateView,
-    CommentCreateView,
     ArticleWithCommentsDetailView,
+    CommentCreateView,
     CommentWithCommentsDetailView
 )
 
 urlpatterns = [
-    path('article/', ArticleCreateView.as_view()),
-    path('article/<int:pk>/', ArticleWithCommentsDetailView.as_view()),
-    path('comment/', CommentCreateView.as_view()),
-    path('comment/<int:pk>/', CommentWithCommentsDetailView.as_view()),
+    path('articles/', ArticleCreateView.as_view()),
+    path('articles/<int:pk>/', ArticleWithCommentsDetailView.as_view()),
+    path('comments/', CommentCreateView.as_view()),
+    path('comments/<int:pk>/', CommentWithCommentsDetailView.as_view()),
 ]

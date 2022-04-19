@@ -13,6 +13,7 @@ class Article(models.Model):
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, related_name='comments', on_delete=models.CASCADE)
+    author = models.CharField(max_length=70)
     content = models.CharField(max_length=150)
     parent = models.ForeignKey('self', related_name='replies', blank=True, null=True, on_delete=models.CASCADE)
     level = models.IntegerField(default=0)
