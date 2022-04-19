@@ -10,7 +10,7 @@ from .serializers import (
 
 class ArticleCreateView(CreateAPIView):
     """
-    Add posts as an instance
+    Add article as an instance
     which we attach 1-lvl comments to
     """
     serializer_class = ArticleSerializer
@@ -39,7 +39,7 @@ class CommentCreateView(CreateAPIView):
 
 class ArticleWithCommentsDetailView(RetrieveAPIView):
     """
-    Get the posts and all comments/nested comments to it
+    Get the article and all comments/nested comments to it
     until the 3 lvl
     """
     queryset = Article.objects.all()
