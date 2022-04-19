@@ -30,14 +30,19 @@ Install all the dependencies from requirements.txt:
 
 `pip install -r requirements.txt`
 
+Go to the folder, where you see the file 'manage.py'.
 Autocreate SQLlite database by running:
-``
 
-Go to the folder, where you see the file 'manage.py'. To start
-the server type:
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+To start the server type:
 
 `python manage.py runserver`
 
-Now you can check its work at:
+Now you can check API's swagger documentation
+and test all endpoints at:
 
-`http://127.0.0.1:8000/`
+`localhost:8000/swagger/`
